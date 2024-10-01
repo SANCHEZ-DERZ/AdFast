@@ -1,29 +1,10 @@
 #подключение библиотек
 import telebot
 from telebot import types
-from mysql.connector import connect, Error
-
-
-def adding_user_in_bd(user_name):
-    try:
-        with connect(
-            host="localhost",
-            user="root",
-            password="Alex2140",
-            database="users_adfast"
-        ) as connection:
-            insert_user = f"""INSERT INTO users_adfast (name)
-            SELECT '%s'
-            WHERE NOT EXISTS (
-                SELECT 1 FROM users_adfast
-                WHERE name = '%s'
-            );
-            """ % (user_name, user_name)
-            with connection.cursor() as cursor:
-                cursor.execute(insert_user)
-                connection.commit()
-    except Error as e:
-        print(e)
+import os
+import sys
+sys.path.append(os.getcwd())
+from sql_database import sql_requests
 
 
 #подключение бота к коду через ключ
@@ -31,7 +12,7 @@ bot = telebot.TeleBot('7224861304:AAEg-57ikPQaxWCBGc7f2E-w79WiCXV7uIU')
 count_pages = {'category pages': 1}
 max_pages = {'category pages': 2}
 
-#выполнение команды /start, создание кнопки к сообщению
+#выполнение команды /start, создание кнопки к сообщению, добавление пользователя в бд
 @bot.message_handler(commands=['start'])
 def start(message):
     markup = types.InlineKeyboardMarkup()
@@ -43,7 +24,7 @@ f"""Приветствую, {message.from_user.first_name}!
 Дальнейший функционал будет добавлен позже.
 А пока можно потыкать на кнопки ниже :)""", 
 reply_markup=markup)
-    adding_user_in_bd(message.from_user.first_name)
+    sql_requests.adding_user_in_database(message.from_user.first_name, message.from_user.id)
 
 
 
@@ -99,3 +80,6 @@ def back_callback(call):
     callback_start(call)
 
 bot.polling()
+
+# Close connection
+sql_requests.connection.close()
