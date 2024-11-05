@@ -2,7 +2,7 @@ import mysql.connector
 import os
 import sys
 sys.path.append(os.getcwd())
-import config
+import AdFast.config as config
 print(config.__file__)
    
 
