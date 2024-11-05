@@ -4,6 +4,7 @@ from telebot import types
 import os
 import sys
 sys.path.append(os.getcwd())
+from sql_database import sql_requests
 
 #подключение бота к коду через ключ
 bot = telebot.TeleBot('7224861304:AAEg-57ikPQaxWCBGc7f2E-w79WiCXV7uIU')
@@ -22,6 +23,7 @@ f"""Приветствую, {message.from_user.first_name}!
 Дальнейший функционал будет добавлен позже.
 А пока можно потыкать на кнопки ниже :)""", 
 reply_markup=markup)
+    sql_requests.adding_user_in_database(message.from_user.first_name, message.from_user.id)
 
 
 
@@ -135,3 +137,5 @@ def back_count_callback(call):
 bot.polling()
 
 # Close connection
+
+sql_requests.connection.close()
