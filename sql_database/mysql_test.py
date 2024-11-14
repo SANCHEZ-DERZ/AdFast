@@ -18,5 +18,5 @@ try:
 except Error as e:
     print(e)
 
-print(rows)
 
+print(rows)
