@@ -4,6 +4,7 @@ from telebot import types
 import os
 import sys
 sys.path.append(os.getcwd())
+from sql_database import sql_requests
 
 #подключение бота к коду через ключ
 bot = telebot.TeleBot('7224861304:AAEg-57ikPQaxWCBGc7f2E-w79WiCXV7uIU')
@@ -22,7 +23,7 @@ f"""Приветствую, {message.from_user.first_name}!
 Дальнейший функционал будет добавлен позже.
 А пока можно потыкать на кнопки ниже :)""", 
 reply_markup=markup)
-
+    sql_requests.adding_user_in_database(message.from_user.first_name, message.from_user.id)
 
 
 
@@ -89,7 +90,7 @@ def category_callback(call):
     markup = types.InlineKeyboardMarkup()
 
     # Определяем названия кнопок, которые будут добавлены в клавиатуру
-    button_names = ['0-10.000', '10.000 - 50.000', '50.000-100.000', '100.000-500.000', '500.000-1.000.000', '1.000.000+']
+    button_names = ['10.000-', '10.000 - 50.000', '50.000-100.000', '100.000-500.000', '500.000-1.000.000', '1.000.000+']
     # Добавляем кнопки на клавиатуру
     for i in range(0, len(button_names), 2):
         button1 = types.InlineKeyboardButton(button_names[i], callback_data=f"count {button_names[i]}")
@@ -133,7 +134,11 @@ def back_count_callback(call):
     bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
     bot.delete_message(call.message.chat.id, call.message.message_id)
     
+print(sql_requests.selecting_info_of_source('name'))
+
+
 bot.polling()
 
 # Close connection
 
+sql_requests.connection.close()
