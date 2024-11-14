@@ -9,11 +9,14 @@ try:
         database="users_adfast"
     ) as connection:
         delete_user = """
-        DELETE FROM users_adfast WHERE NAME = 'SANCHEZ'
+        SELECT * FROM users_adfast
         """
-        with connection.cursor() as cursor:
-            cursor.execute(delete_user)
-            connection.commit()
+        my_cursor = connection.cursor()
+        my_cursor.execute(delete_user)
+        rows = my_cursor.fetchall()
+        connection.commit()
 except Error as e:
     print(e)
 
+
+print(rows)
