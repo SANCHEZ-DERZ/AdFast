@@ -4,7 +4,7 @@ from telebot import types
 import os
 import sys
 sys.path.append(os.getcwd())
-from sql_database import sql_requests
+from AdFast.sql_database import sql_requests
 
 #подключение бота к коду через ключ
 bot = telebot.TeleBot('7224861304:AAEg-57ikPQaxWCBGc7f2E-w79WiCXV7uIU')

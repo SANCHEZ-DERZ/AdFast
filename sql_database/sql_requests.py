@@ -3,8 +3,6 @@ import os
 import sys
 sys.path.append(os.getcwd())
 import AdFast.config as config
-print(config.__file__)
-   
 
 
 def adding_user_in_database(user_name, user_id):
@@ -57,6 +55,5 @@ connection = mysql.connector.connect(
     password=config.my_sql_password,
     database=config.my_sql_database
     )
-
 
 
