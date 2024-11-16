@@ -71,8 +71,6 @@ def socnet_callback(call):
 #переключение на страницу вперед
 @bot.callback_query_handler(func=lambda call: call.data == 'forward_page_chan')
 def forward_callback(call):
-    bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
-    bot.delete_message(call.message.chat.id, call.message.message_id)
     functions.pages['page_chan'] += 1
     functions.socnet_callback_func(call, bot, choise)
 
@@ -80,8 +78,6 @@ def forward_callback(call):
 #переключение на страницу назад   
 @bot.callback_query_handler(func=lambda call: call.data == 'back_page_chan')
 def back_callback(call):
-    bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
-    bot.delete_message(call.message.chat.id, call.message.message_id)
     functions.pages['page_chan'] -= 1
     functions.socnet_callback_func(call, bot, choise)
 

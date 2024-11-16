@@ -22,18 +22,23 @@ def adding_user_in_database(user_name, user_id):
 # пример работы функции:
 # print(selecting_info_of_source('name'))
 # >>> [('CodeCamp',), ('easyoffer',)]
-def selecting_info_of_source(command):
+def selecting_info_of_source(command, category, subscribers_begin, subscribers_end, platform):
     try:
         selecting = f"""SELECT %s FROM sources
-        """ % (command)
+            WHERE category = "%s" and subscribers BETWEEN %d and %d and platform = "%s"
+            ORDER BY subscribers DESC
+        """ % (command, category, subscribers_begin, subscribers_end, platform)
         cur = connection.cursor()
         cur.execute(selecting)
         rows = cur.fetchall()
         connection.commit()
-        return rows
+        # Преобразуем rows в список
+        result_list = [row for row in rows]  # Список кортежей
+        # Если нужно получить плоский список значений из первого столбца:
+        flat_list = [row[0] for row in rows]  # Плоский список значений
+        return flat_list
     except mysql.connector.Error as e:
         print(e)
-    
 
 def adding_source_in_database(name, link, platform, subscribers, category):
     try:

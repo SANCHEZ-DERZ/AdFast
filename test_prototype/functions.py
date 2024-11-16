@@ -117,7 +117,7 @@ def socnet_callback_func(call, bot, choise):
 def page_channels_func(call, bot, choise, lst_chan):
     markup = types.InlineKeyboardMarkup()
     start_ind = (pages["page_chan"] - 1) * 4 # определяю стартовый индекс из списка
-    pages['max_page_chan'] = lst_chan // 4 + (lst_chan % 4 != 0)
+    pages['max_page_chan'] = len(lst_chan) // 4 + int((len(lst_chan) % 4 != 0))
     ind = start_ind
     while (ind < len(lst_chan) and ind < start_ind + 4): # Добавляю либо 4 кнопки по 1 в строке, либо иду до конца списка
         chan_btn = types.InlineKeyboardButton(lst_chan[ind], callback_data=f'chan {lst_chan[ind]}')
@@ -131,7 +131,7 @@ def page_channels_func(call, bot, choise, lst_chan):
         move_back_btn = types.InlineKeyboardButton('Назад', callback_data='back_page_chan')
         markup.row(move_back_btn)
     elif pages["page_chan"] != 1 and pages["page_chan"] != pages["max_page_chan"]:
-        move_forward_btn = types.InlineKeyboardButton('Вперед', callback_data='forward_page_chan')
         move_back_btn = types.InlineKeyboardButton('Назад', callback_data='back_page_chan')
+        move_forward_btn = types.InlineKeyboardButton('Вперед', callback_data='forward_page_chan')
         markup.row(move_forward_btn, move_back_btn)
     bot.send_message(call.message.chat.id, 'Вот кандидаты на размещение рекламы:', reply_markup=markup)
