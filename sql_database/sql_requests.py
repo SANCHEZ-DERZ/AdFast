@@ -26,6 +26,7 @@ def selecting_info_of_source(command, category, subscribers_begin, subscribers_e
     try:
         selecting = f"""SELECT %s FROM sources
             WHERE category = "%s" and subscribers BETWEEN %d and %d and platform = "%s"
+            ORDER subscribers by ACS
         """ % (command, category, subscribers_begin, subscribers_end, platform)
         cur = connection.cursor()
         cur.execute(selecting)
