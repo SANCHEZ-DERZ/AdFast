@@ -22,10 +22,11 @@ def adding_user_in_database(user_name, user_id):
 # пример работы функции:
 # print(selecting_info_of_source('name'))
 # >>> [('CodeCamp',), ('easyoffer',)]
-def selecting_info_of_source(command):
+def selecting_info_of_source(command, category, subscribers_begin, subscribers_end):
     try:
         selecting = f"""SELECT %s FROM sources
-        """ % (command)
+            WHERE category = "%s" and subscribers BETWEEN %d and %d
+        """ % (command, category, subscribers_begin, subscribers_end)
         cur = connection.cursor()
         cur.execute(selecting)
         rows = cur.fetchall()
@@ -33,7 +34,7 @@ def selecting_info_of_source(command):
         return rows
     except mysql.connector.Error as e:
         print(e)
-    
+
 
 def adding_source_in_database(name, link, platform, subscribers, category):
     try:

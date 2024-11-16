@@ -134,8 +134,7 @@ def back_count_callback(call):
     bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
     bot.delete_message(call.message.chat.id, call.message.message_id)
     
-print(sql_requests.selecting_info_of_source('name'))
-
+print(sql_requests.selecting_info_of_source("name", "IT", 100000, 500000))
 
 bot.polling()
 
