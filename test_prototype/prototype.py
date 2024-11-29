@@ -19,6 +19,7 @@ def start(message):
 @bot.callback_query_handler(func=lambda call: call.data == 'start_search')
 def callback_start(call):
     functions.page_category(call, bot)
+    choise = {"category" : "", "count" : "", "socnet" : ""}
 
 #переключение на страницу вперед
 @bot.callback_query_handler(func=lambda call: call.data == 'forward_page_category')
@@ -26,7 +27,7 @@ def forward_callback(call):
     bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
     bot.delete_message(call.message.chat.id, call.message.message_id)
     bot.answer_callback_query(call.id, text="Вы нажали кнопку 'Вперед'")
-    functions.pages['page_category'] += 1
+    functions.pages_instance.page_category += 1
     functions.page_category(call, bot)
 
 #переключение на страницу назад   
@@ -35,7 +36,7 @@ def back_callback(call):
     bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
     bot.delete_message(call.message.chat.id, call.message.message_id)
     bot.answer_callback_query(call.id, text="Вы нажали кнопку 'Назад'")
-    functions.pages['page_category'] -= 1
+    functions.pages_instance.page_category -= 1
     functions.page_category(call, bot)
     
     
@@ -71,14 +72,14 @@ def socnet_callback(call):
 #переключение на страницу вперед
 @bot.callback_query_handler(func=lambda call: call.data == 'forward_page_chan')
 def forward_callback(call):
-    functions.pages['page_chan'] += 1
+    functions.pages_instance.page_chan += 1
     functions.socnet_callback_func(call, bot, choise)
 
 
 #переключение на страницу назад   
 @bot.callback_query_handler(func=lambda call: call.data == 'back_page_chan')
 def back_callback(call):
-    functions.pages['page_chan'] -= 1
+    functions.pages_instance.page_chan -= 1
     functions.socnet_callback_func(call, bot, choise)
 
 bot.polling()
