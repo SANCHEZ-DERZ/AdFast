@@ -50,6 +50,9 @@ def adding_source_in_database(name, link, platform, subscribers, category):
         print(e)
 
 
+#def getting_info_of_source(name):
+
+
 # Connect to server
 connection = mysql.connector.connect(
     host=config.my_sql_host,
