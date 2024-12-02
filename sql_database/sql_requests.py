@@ -53,7 +53,33 @@ def adding_source_in_database(name, link, platform, subscribers, category):
         print(e)
 
 
-#def getting_info_of_source(name):
+def getting_info_of_source(choise, num):
+    l_border = 0
+    r_border = 0
+    if choise['count'][-1] == '-':
+        l_border = 0
+        r_border = 10000
+    elif choise['count'][-1] == '+':
+        l_border = 1000000
+        r_border = 100000000
+    else:
+        temp_count = list(choise['count'].split('-'))
+        l_border = int(temp_count[0].replace('.', ''))
+        r_border = int(temp_count[1].replace('.', ''))
+    try:
+        selecting = f"""SELECT name, subscribers, description, contact FROM sources
+            WHERE category = "%s" and subscribers BETWEEN %d and %d and platform = "%s"
+            ORDER BY subscribers DESC
+        """ % (choise['category'], l_border, r_border, choise['socnet'])
+        cur = connection.cursor()
+        cur.execute(selecting)
+        rows = cur.fetchall()
+        connection.commit()
+        # Преобразуем rows в список
+        result_list = [row for row in rows]  # Список кортежей
+        return result_list[num]
+    except mysql.connector.Error as e:
+        print(e)
 
 
 # Connect to server

@@ -161,10 +161,10 @@ def page_channels_func(call, bot, choise, lst_chan):
 def result_callback_func(call, bot, choice):
     # Извлекаем номер из call.data
     # Предполагаем, что call.data имеет формат 'result_{num}'
-    num = call.data.split('_')[1]
+    num = int(call.data.split('_')[1])
 
-    # Вызываем функцию info_about с аргументами choice и num
-    channel_info = info_about(choice, num)
+    # Вызываем функцию getting_info_of_source с аргументами choice и num
+    channel_info = sql_requests.getting_info_of_source(choice, num)
 
     # Предполагаем, что channel_info — это список с нужными данными
     name = channel_info[0]         # Название канала
@@ -173,7 +173,7 @@ def result_callback_func(call, bot, choice):
     contacts = channel_info[3]     # Контакты для связи
 
     # Формируем сообщение для отправки
-    message = f"{name}\n" \
+    message = f"Название: '{name}'\n" \
               f"Подписчики: {amount}\n" \
               f"Описание:\n{description}\n" \
               f"Контакты:\n{contacts}"
