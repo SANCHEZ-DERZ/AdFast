@@ -3,7 +3,7 @@ from mysql.connector import connect, Error
 import os
 import sys
 sys.path.append(os.getcwd())
-import AdFast.config as config
+import config as config
 
 
 

@@ -3,8 +3,8 @@ from telebot import types
 import os
 import sys
 sys.path.append(os.getcwd())
-from AdFast.sql_database import sql_requests
-from AdFast.test_prototype.functions import lst, start_func, page_selection, socnet_callback_func, result_callback_func, cancell_func, forward_back
+from sql_database import sql_requests
+from functions import lst, start_func, page_selection, socnet_callback_func, result_callback_func, cancell_func, forward_back
 
 
 bot = telebot.TeleBot('7224861304:AAEg-57ikPQaxWCBGc7f2E-w79WiCXV7uIU')

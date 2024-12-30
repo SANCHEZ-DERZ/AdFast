@@ -3,9 +3,9 @@ from telebot import types
 import os
 import sys
 sys.path.append(os.getcwd())
-from AdFast.sql_database import sql_requests
+from sql_database import sql_requests
 from dataclasses import dataclass
-from AdFast import pages_instance, lst, Button
+from __init__ import pages_instance, lst, Button
 
 
 def start_func(message, bot):
