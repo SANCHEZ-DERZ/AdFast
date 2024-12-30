@@ -3,36 +3,10 @@ from telebot import types
 import os
 import sys
 sys.path.append(os.getcwd())
-from sql_database import sql_requests
+from AdFast.sql_database import sql_requests
 from dataclasses import dataclass
+from AdFast import pages_instance, lst, Button
 
-sys.path.append(os.getcwd())
-
-@dataclass
-class Pages:
-    page_category: int
-    max_page_category: int
-    page_result: int
-    max_page_result: int
-    page_socnet: int
-    max_page_socnet: int
-    page_count: int
-    max_page_count: int
-
-pages_instance = Pages(page_category=1, max_page_category=2, page_result=1, max_page_result=0, max_page_count=2, max_page_socnet=2, page_count=1, page_socnet=1)
-
-@dataclass
-class Button:
-    text: str
-    callback_data: str
-
-@dataclass
-class Lists:
-    category: list
-    socnet: list
-    count: list
-
-lst = Lists(category=["Fashion", "IT", "Travel", "Business", "Beauty"], count=['10.000-', '10.000-50.000', '50.000-100.000', '100.000-500.000', '500.000-1.000.000', '1.000.000+'], socnet=['Instagram', 'Telegram', 'TikTok', 'VK', 'YouTube', 'Yandex Dzen'])
 
 def start_func(message, bot):
     markup = types.InlineKeyboardMarkup()
@@ -124,9 +98,9 @@ def socnet_callback_func(call, bot, choise):
     
     l_border, r_border = determine_borders(choise['count'])
     
-    lst_channels = sql_requests.connection.selecting_info_of_source('name', choise['category'], l_border, r_border, choise['socnet'])
+    lst.result = sql_requests.connection.selecting_info_of_source('name', choise['category'], l_border, r_border, choise['socnet'])
     
-    page_selection(call, bot, lst_channels, 'result')
+    page_selection(call, bot, lst.result, 'result')
 
 def determine_borders(count_choice):
     if count_choice[-1] == '-':
@@ -141,7 +115,7 @@ def determine_borders(count_choice):
 def result_callback_func(call, bot, choice):
     num = int(call.data.split(' ')[1])
     
-    channel_info = sql_requests.connection.getting_info_of_source(choice, num)
+    channel_info = sql_requests.connection.getting_info_of_source(choice, num - 1)
     
     message = f"Название: '{channel_info[0]}'\nПодписчики: {channel_info[1]}\nОписание:\n{channel_info[2]}\nКонтакты:\n{channel_info[3]}"
     
@@ -152,3 +126,28 @@ def result_callback_func(call, bot, choice):
     
     bot.send_message(call.message.chat.id, message)
     bot.send_message(call.message.chat.id, "Выберите действие:", reply_markup=markup)
+
+def forward_back(call, bot):
+
+    callback_data = call.data.split()
+    action = callback_data[0] 
+    item_type = callback_data[1]
+
+    attribute_map = {
+        'category': 'page_category',
+        'result': 'page_result',
+        'count': 'page_count',
+        'socnet': 'page_socnet'
+    }
+
+    attribute_name = attribute_map.get(item_type)
+
+    if attribute_name:
+        if action == 'forward_page':
+            setattr(pages_instance, attribute_name, getattr(pages_instance, attribute_name) + 1)
+        elif action == 'back_page':
+            setattr(pages_instance, attribute_name, getattr(pages_instance, attribute_name) - 1)
+    lst_name = getattr(lst, item_type)
+    
+    page_selection(call, bot, lst_name, item_type)
+

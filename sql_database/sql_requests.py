@@ -3,7 +3,8 @@ from mysql.connector import connect, Error
 import os
 import sys
 sys.path.append(os.getcwd())
-import config as config
+import AdFast.config as config
+
 
 
 class DatabaseConnection:
